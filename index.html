@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA, Pintura e Criatividade Infantil</title>
+<meta name="description" content="Briefing sobre o impacto da tecnologia de pintura baseada em IA no pensamento criativo infantil.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-title: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+
+    --blue: #1E40FB;
+    --red: #FC0019;
+    --yellow: #FECF2F;
+    --green: #1FD025;
+    --ink: #434344;
+    --paper: #F9F9F9;
+
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(20, 20, 40, .18);
+    --bg-img: url("https://raw.githubusercontent.com/GlauberLASantiago/gl-cores-fontes-e-fundos/main/abstrato/z_svg_70_vitral_gotico_rosacea_cores.svg");
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  h1, h2, h3, h4 { font-family: var(--font-title); }
+  body, p, span, a, input, button { font-family: var(--font-body); }
+
+  body {
+    color: var(--ink);
+    background-color: var(--paper);
+    background-image: var(--bg-img);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    line-height: 1.7;
+    font-size: 17px;
+  }
+  /* Véu para garantir legibilidade sobre o vitral */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background: linear-gradient(180deg, rgba(249,249,249,.12), rgba(249,249,249,.28));
+    z-index: -1;
+  }
+
+  a { color: var(--blue); }
+  img, video { max-width: 100%; display: block; }
+
+  /* Barra de cores */
+  .stripe { display: flex; height: 6px; }
+  .stripe span { flex: 1; }
+  .stripe span:nth-child(1) { background: var(--blue); }
+  .stripe span:nth-child(2) { background: var(--red); }
+  .stripe span:nth-child(3) { background: var(--yellow); }
+  .stripe span:nth-child(4) { background: var(--green); }
+
+  /* Navegação */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(249,249,249,.94);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+  }
+  nav .inner {
+    max-width: 1100px; margin: 0 auto; padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  nav .brand { font-family: var(--font-title); font-weight: 800; color: var(--blue); text-decoration: none; white-space: nowrap; }
+  nav ul { list-style: none; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  nav ul::-webkit-scrollbar { display: none; }
+  nav ul a {
+    display: block; padding: 6px 12px; border-radius: 999px;
+    text-decoration: none; color: var(--ink); font-weight: 600; font-size: 14px; white-space: nowrap;
+  }
+  nav ul a:hover { background: var(--yellow); }
+
+  /* Hero */
+  header.hero {
+    max-width: 1100px; margin: 48px auto 0; padding: 0 16px;
+  }
+  .hero-card {
+    background: var(--blue);
+    color: var(--paper);
+    border-radius: var(--radius);
+    padding: clamp(28px, 6vw, 64px);
+    box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+  }
+  .hero-card::after {
+    content: ""; position: absolute; right: -80px; top: -80px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: var(--yellow); opacity: .9;
+  }
+  .hero-card::before {
+    content: ""; position: absolute; right: 90px; bottom: -60px;
+    width: 140px; height: 140px; border-radius: 50%;
+    background: var(--red); opacity: .9;
+  }
+  .eyebrow {
+    display: inline-block; font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+    background: var(--green); color: #0b2a0c; padding: 4px 12px; border-radius: 999px; margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 52px); line-height: 1.12; font-weight: 800;
+    max-width: 780px; position: relative; z-index: 1; text-wrap: balance;
+  }
+  .hero h1 em { font-style: normal; color: var(--yellow); }
+  .hero p.lead { margin-top: 18px; font-size: 19px; max-width: 640px; opacity: .92; position: relative; z-index: 1; }
+
+  /* Layout */
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; }
+  section { margin-top: 32px; scroll-margin-top: 80px; }
+
+  .card {
+    background: rgba(249,249,249,.97);
+    border-radius: var(--radius);
+    padding: clamp(22px, 4vw, 44px);
+    box-shadow: var(--shadow);
+  }
+
+  .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border-radius: 12px;
+    font-family: var(--font-title); font-weight: 800; font-size: 20px; color: #fff;
+    margin-bottom: 12px;
+  }
+  h2 { font-size: clamp(22px, 3.2vw, 32px); line-height: 1.2; color: #1d1d1e; margin-bottom: 14px; text-wrap: balance; }
+  h3 { font-size: 19px; color: #1d1d1e; margin: 26px 0 12px; }
+  p + p { margin-top: 12px; }
+
+  .accent-blue   { border-top: 6px solid var(--blue); }
+  .accent-red    { border-top: 6px solid var(--red); }
+  .accent-yellow { border-top: 6px solid var(--yellow); }
+  .accent-green  { border-top: 6px solid var(--green); }
+  .bg-blue { background: var(--blue); }
+  .bg-red { background: var(--red); }
+  .bg-yellow { background: var(--yellow); color: #3a2c00; }
+  .bg-green { background: var(--green); }
+
+  /* Sumário executivo */
+  .summary p { font-size: 18px; }
+  .summary strong { color: #1d1d1e; background: linear-gradient(transparent 60%, rgba(254,207,47,.6) 60%); }
+
+  /* Grade de cards */
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-top: 20px; }
+  .tile {
+    background: #fff; border-radius: 14px; padding: 20px;
+    border: 1px solid #e6e6ea; border-left: 5px solid var(--c, var(--blue));
+  }
+  .tile h4 { font-size: 16px; margin-bottom: 6px; color: #1d1d1e; }
+  .tile p { font-size: 15px; }
+
+  /* Tabela */
+  .table-wrap { overflow-x: auto; margin-top: 18px; border-radius: 14px; border: 1px solid #e6e6ea; }
+  table { width: 100%; border-collapse: collapse; background: #fff; min-width: 520px; }
+  th, td { text-align: left; padding: 14px 18px; vertical-align: top; }
+  thead th { background: var(--blue); color: #fff; font-family: var(--font-title); font-weight: 700; font-size: 15px; }
+  tbody tr:nth-child(even) { background: #f3f4fb; }
+  tbody td:first-child { font-weight: 600; color: #1d1d1e; white-space: nowrap; }
+  tbody td:first-child::before {
+    content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+    margin-right: 10px; background: var(--c);
+  }
+
+  /* Riscos */
+  .risk-list { list-style: none; display: grid; gap: 14px; margin-top: 18px; }
+  .risk-list > li {
+    background: #fff; border-radius: 14px; padding: 18px 20px; border: 1px solid #f1d4d7;
+    border-left: 5px solid var(--red);
+  }
+  .risk-list strong { color: #1d1d1e; font-family: var(--font-title); }
+  .chips { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin-top: 12px; }
+  .chip { background: #fff6f7; border-radius: 10px; padding: 12px 14px; font-size: 15px; }
+  .chip b { display: block; color: var(--red); }
+
+  /* Faixas etárias */
+  .ages { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .age { border-radius: 16px; padding: 22px; color: #fff; }
+  .age .range { font-family: var(--font-title); font-weight: 800; font-size: 30px; line-height: 1; }
+  .age .range small { font-size: 15px; font-weight: 600; opacity: .9; }
+  .age p { margin-top: 10px; font-size: 15px; }
+  .age.bg-yellow { color: #3a2c00; }
+
+  ol.principles { list-style: none; counter-reset: p; display: grid; gap: 12px; margin-top: 8px; }
+  ol.principles li {
+    counter-increment: p; position: relative; padding: 16px 18px 16px 64px;
+    background: #fff; border-radius: 14px; border: 1px solid #e6e6ea;
+  }
+  ol.principles li::before {
+    content: counter(p); position: absolute; left: 16px; top: 14px;
+    width: 34px; height: 34px; border-radius: 50%; background: var(--green); color: #0b2a0c;
+    font-family: var(--font-title); font-weight: 800; display: grid; place-items: center;
+  }
+
+  ul.recs { list-style: none; display: grid; gap: 10px; margin-top: 12px; }
+  ul.recs li { padding-left: 30px; position: relative; }
+  ul.recs li::before {
+    content: ""; position: absolute; left: 4px; top: .55em;
+    width: 12px; height: 12px; border-radius: 3px; background: var(--yellow); transform: rotate(45deg);
+  }
+
+  /* Mídias */
+  .media-grid { display: grid; gap: 20px; grid-template-columns: 1fr; margin-top: 18px; }
+  @media (min-width: 860px) { .media-grid { grid-template-columns: 1fr 1fr; } }
+  .media { background: #fff; border-radius: 16px; border: 1px solid #e6e6ea; overflow: hidden; }
+  .media .label {
+    display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+    font-family: var(--font-title); font-weight: 700; color: #1d1d1e; font-size: 16px;
+  }
+  .media .label i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); flex: none; }
+  .media .body { padding: 0 18px 18px; }
+  .media video { width: 100%; border-radius: 10px; background: #111; }
+  .media audio { width: 100%; margin-top: 6px; }
+  .media .hint { font-size: 13px; margin-top: 8px; opacity: .8; }
+  .media.infographic { grid-column: 1 / -1; }
+  .media.infographic img { width: 100%; height: auto; border-radius: 10px; cursor: zoom-in; }
+  .audio-box { background: linear-gradient(135deg, var(--yellow), #ffe58a); border-radius: 12px; padding: 18px; }
+  .audio-box p { font-size: 15px; color: #3a2c00; margin-bottom: 8px; }
+
+  /* Rodapé */
+  footer { background: var(--ink); color: var(--paper); }
+  footer .inner { max-width: 1100px; margin: 0 auto; padding: 28px 16px; text-align: center; }
+  footer p { font-size: 15px; }
+
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    nav .brand { display: none; }
+    .hero-card::after { width: 160px; height: 160px; right: -60px; top: -60px; }
+    .hero-card::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stripe"><span></span><span></span><span></span><span></span></div>
+
+<nav aria-label="Seções">
+  <div class="inner">
+    <a class="brand" href="#topo">IA &amp; Criatividade</a>
+    <ul>
+      <li><a href="#sumario">Sumário</a></li>
+      <li><a href="#midias">Mídias</a></li>
+      <li><a href="#papel">Papel da IA</a></li>
+      <li><a href="#autonomia">Autonomia</a></li>
+      <li><a href="#riscos">Riscos</a></li>
+      <li><a href="#estrategias">Estratégias</a></li>
+      <li><a href="#conclusoes">Conclusões</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="topo">
+  <div class="hero-card">
+    <span class="eyebrow">Briefing abrangente</span>
+    <h1>Impacto da Tecnologia de Pintura Baseada em IA no <em>Pensamento Criativo Infantil</em></h1>
+    <p class="lead">Uma síntese da revisão sistemática sobre a integração da Inteligência Artificial no ensino de artes para crianças.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- Sumário Executivo -->
+  <section id="sumario">
+    <div class="card summary accent-blue">
+      <h2>Sumário Executivo</h2>
+      <p>Este documento sintetiza as principais conclusões de uma revisão sistemática sobre a integração da Inteligência Artificial (IA) no ensino de artes para crianças. A análise indica que as ferramentas de pintura baseadas em IA atuam como <strong>catalisadores do pensamento criativo</strong>, ampliando a fluência, a flexibilidade e a originalidade da expressão infantil. Ao reduzir a carga cognitiva em tarefas técnicas e fornecer ambientes virtuais interativos, a IA permite que as crianças se concentrem em processos generativos.</p>
+      <p>No entanto, o briefing identifica riscos significativos, como a <strong>homogeneização cognitiva</strong> — onde as interfaces padronizadas podem limitar a divergência criativa — e a <strong>dependência tecnológica</strong>. A integração eficaz requer que educadores selecionem ferramentas apropriadas para a idade, priorizem a subjetividade da criança e adotem avaliações orientadas ao processo em vez de focarem apenas no resultado final.</p>
+    </div>
+  </section>
+
+  <!-- Mídias -->
+  <section id="midias">
+    <div class="card accent-yellow">
+      <h2>Explore o tema em outros formatos</h2>
+      <p>Infográfico, áudio e vídeo para aprofundar a discussão.</p>
+      <div class="media-grid">
+
+        <div class="media infographic" style="--c: var(--blue)">
+          <div class="label"><i></i>Infográfico: IA na educação artística do Brasil</div>
+          <div class="body">
+            <a href="https://raw.githubusercontent.com/gaelvoador/topico4-criatividade/main/IA%20na%20educacao%20artistica%20do%20Brasil.png" target="_blank" rel="noopener">
+              <img src="https://raw.githubusercontent.com/gaelvoador/topico4-criatividade/main/IA%20na%20educacao%20artistica%20do%20Brasil.png" alt="Infográfico sobre a IA na educação artística do Brasil" loading="lazy">
+            </a>
+            <p class="hint">Clique na imagem para abrir em tamanho original.</p>
+          </div>
+        </div>
+
+        <div class="media" style="--c: var(--red)">
+          <div class="label"><i></i>Vídeo: Como a IA libera a imaginação infantil</div>
+          <div class="body">
+            <video controls preload="metadata" playsinline>
+              <source src="https://raw.githubusercontent.com/gaelvoador/topico4-criatividade/main/Como_a_IA_Libera_a_Imagina%C3%A7%C3%A3o_Infantil.mp4" type="video/mp4">
+              Seu navegador não suporta vídeo incorporado.
+            </video>
+            <p class="hint">Não carregou? <a href="https://github.com/gaelvoador/topico4-criatividade/blob/main/Como_a_IA_Libera_a_Imagina%C3%A7%C3%A3o_Infantil.mp4" target="_blank" rel="noopener">Assista no GitHub</a>.</p>
+          </div>
+        </div>
+
+        <div class="media" style="--c: var(--green)">
+          <div class="label"><i></i>Áudio: A IA está padronizando a educação artística no Brasil?</div>
+          <div class="body">
+            <div class="audio-box">
+              <p>Uma conversa sobre os riscos de homogeneização e os caminhos para preservar a originalidade das crianças.</p>
+              <audio controls preload="metadata">
+                <source src="https://raw.githubusercontent.com/gaelvoador/topico4-criatividade/main/A%20IA%20esta%20padronizando%20a%20educacao%20artistica%20no%20Brasil.m4a" type="audio/mp4">
+                Seu navegador não suporta áudio incorporado.
+              </audio>
+            </div>
+            <p class="hint">Não carregou? <a href="https://github.com/gaelvoador/topico4-criatividade/blob/main/A%20IA%20esta%20padronizando%20a%20educacao%20artistica%20no%20Brasil.m4a" target="_blank" rel="noopener">Ouça no GitHub</a>.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 1 -->
+  <section id="papel">
+    <div class="card">
+      <span class="num bg-blue">1</span>
+      <h2>O Papel da IA no Desenvolvimento do Pensamento Criativo</h2>
+      <p>O pensamento criativo é uma habilidade indispensável do século XXI, abrangendo a resolução de problemas, o pensamento independente e a expressão original. A tecnologia de IA está transformando esse cenário ao atuar não apenas como uma ferramenta, mas como um <strong>“parceiro de aprendizagem colaborativo”</strong>.</p>
+      <h3>Dimensões do Impacto Positivo</h3>
+      <div class="grid">
+        <div class="tile" style="--c: var(--blue)">
+          <h4>Ampliação da Expressão</h4>
+          <p>A IA reduz o “limiar” para a expressão visual, permitindo que crianças sem habilidades técnicas avançadas produzam trabalhos complexos, elevando o “teto” das possibilidades criativas.</p>
+        </div>
+        <div class="tile" style="--c: var(--red)">
+          <h4>Redução da Carga Cognitiva</h4>
+          <p>Ao automatizar processos intensivos (como a conversão de narrativas em imagens), a IA libera recursos mentais para o pensamento ideacional e a exploração.</p>
+        </div>
+        <div class="tile" style="--c: var(--yellow)">
+          <h4>Parceria Social e Robótica</h4>
+          <p>Agentes de IA e robôs sociais funcionam como parceiros que as crianças podem imitar, internalizando novas estratégias criativas por meio da observação.</p>
+        </div>
+        <div class="tile" style="--c: var(--green)">
+          <h4>Apoio Emocional</h4>
+          <p>Sistemas que oferecem feedback adaptativo incentivam a tomada de riscos criativos e aumentam a motivação dos jovens alunos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section id="autonomia">
+    <div class="card">
+      <span class="num bg-green">2</span>
+      <h2>Aprendizado Personalizado e Autonomia Artística</h2>
+      <p>A tecnologia de IA oferece um ambiente dinâmico que cultiva a autonomia e a cognição artística por meio de interações em tempo real.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Recurso da IA</th><th>Impacto no Desenvolvimento Infantil</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="--c: var(--blue)">Feedback em Tempo Real</td><td>Transforma a aquisição técnica em exploração cognitiva, permitindo ajustes iterativos.</td></tr>
+            <tr><td style="--c: var(--red)">Ambientes Virtuais</td><td>Estimulam comportamentos imaginativos além das restrições de recursos físicos.</td></tr>
+            <tr><td style="--c: var(--yellow)">Mecanismos de Interação</td><td>Melhoram a sensibilidade contextual aos elementos artísticos (cores, linhas, composição).</td></tr>
+            <tr><td style="--c: var(--green)">Jogos Colaborativos</td><td>Fomentam a colaboração interpessoal e experiências criativas compartilhadas.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section id="riscos">
+    <div class="card accent-red">
+      <span class="num bg-red">3</span>
+      <h2>Desafios, Riscos e Limitações Éticas</h2>
+      <p>Apesar dos benefícios, a literatura alerta para o <strong>“papel duplo”</strong> da IA, que pode simultaneamente inibir a criatividade se não for gerida pedagogicamente.</p>
+      <ul class="risk-list">
+        <li><strong>Homogeneização Cognitiva:</strong> interfaces padronizadas podem levar a processos de pensamento uniformes, resultando em obras de arte produzidas por crianças que exibem alto grau de similaridade.</li>
+        <li><strong>Dependência Tecnológica:</strong> a exposição prolongada pode prejudicar o pensamento autônomo, fazendo com que a criança dependa da IA para gerar ideias.</li>
+        <li><strong>Falhas de Design e Operação:</strong> respostas atrasadas ou interpretações errôneas das instruções pela IA podem causar frustração e interromper a fluência narrativa.</li>
+        <li>
+          <strong>Preocupações Éticas e Sociais:</strong>
+          <div class="chips">
+            <div class="chip"><b>Privacidade de Dados</b>Riscos associados à coleta de dados infantis.</div>
+            <div class="chip"><b>Viés Algorítmico</b>O impacto de valores embutidos nos sistemas que moldam a visão de mundo das crianças.</div>
+            <div class="chip"><b>Comercialização</b>O potencial de exploração comercial da criatividade infantil.</div>
+            <div class="chip"><b>Saúde Mental</b>Impactos no desenvolvimento de habilidades sociais e bem-estar físico.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section id="estrategias">
+    <div class="card">
+      <span class="num bg-yellow">4</span>
+      <h2>Estratégias para Integração Pedagógica Eficaz</h2>
+      <p>Para maximizar o potencial da IA e mitigar riscos, os educadores devem adotar uma abordagem intencional e fundamentada no desenvolvimento humano.</p>
+
+      <h3>Seleção de Ferramentas por Faixa Etária</h3>
+      <p>A escolha da tecnologia deve alinhar-se às capacidades cognitivas e motoras da criança:</p>
+      <div class="ages" style="margin-top:14px">
+        <div class="age bg-blue">
+          <div class="range">5 a 7 <small>anos</small></div>
+          <p>Recomendam-se ferramentas de <strong>interação por voz</strong> (como StoryDrawer ou ChatScratch), que convertem ideias verbais em imagens, superando limitações na expressão escrita.</p>
+        </div>
+        <div class="age bg-red">
+          <div class="range">8 a 10 <small>anos</small></div>
+          <p>Devem ser priorizados sistemas que incorporam <strong>reconhecimento de contorno, correspondência de cores e cálculos proporcionais</strong>, desafiando suas habilidades cognitivas em evolução.</p>
+        </div>
+      </div>
+
+      <h3>Princípios Educacionais</h3>
+      <ol class="principles">
+        <li><strong>Tecnologia como Meio, não Fim:</strong> a IA deve ser um veículo para a exploração e imaginação, mantendo o interesse e a subjetividade da criança como foco central.</li>
+        <li><strong>Abordagem Não Prescritiva:</strong> educadores devem evitar métodos excessivamente diretivos, priorizando a orientação personalizada e a exploração livre.</li>
+        <li><strong>Avaliação Orientada ao Processo:</strong> a eficácia da IA deve ser medida pela observação do engajamento, curiosidade e espírito exploratório, em vez de métricas focadas apenas no produto final (como testes de produção de desenho).</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section id="conclusoes">
+    <div class="card accent-green">
+      <span class="num bg-blue">5</span>
+      <h2>Conclusões e Direções Futuras</h2>
+      <p>A integração da IA na educação artística infantil demonstra um potencial significativo para fortalecer a fluência e a originalidade criativa. No entanto, a eficácia dessas ferramentas está intrinsecamente ligada à sua aplicação pedagógica.</p>
+      <h3>Principais Recomendações para Pesquisas Futuras</h3>
+      <ul class="recs">
+        <li>Superar a orientação puramente técnica para incluir perspectivas educacionais e humanísticas.</li>
+        <li>Abordar a lacuna entre a funcionalidade da IA e a intencionalidade pedagógica.</li>
+        <li>Desenvolver quadros teóricos robustos que considerem a interação entre IA e desenvolvimento cognitivo.</li>
+        <li>Mitigar preconceitos de amostragem em estudos empíricos, expandindo a pesquisa para além de métodos quantitativos isolados para compreender melhor o comportamento infantil em ambientes de IA.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="stripe"><span></span><span></span><span></span><span></span></div>
+  <div class="inner">
+    <p>Conteúdo gerado por IA sob supervisão de Gael Voador.</p>
+  </div>
+</footer>
+
+</body>
+</html>
